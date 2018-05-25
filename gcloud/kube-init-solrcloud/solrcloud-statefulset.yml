@@ -7,19 +7,26 @@ spec:
     matchLabels:
       app: solrc
   serviceName: "solr-service"
-  replicas: 3
+  replicas: 1
   template:
     metadata:
       labels:
         app: solrc
     spec:
       terminationGracePeriodSeconds: 10
+      securityContext:
+        runAsUser: 8983
+        fsGroup: 8983
       containers:
       - name: solr
         image: solr:latest
         volumeMounts:
         - name: solrc-data
           mountPath: /store
+        command:
+        - sh
+        - -c
+        - mkdir -p /store/data && mkdir -p /store/logs && cp /opt/solr/server/solr/solr.xml /store/data/solr.xml && docker-entrypoint.sh solr-foreground
         ports:
         - name: solr-port
           containerPort: 8983
@@ -49,10 +56,6 @@ spec:
               configMapKeyRef:
                 name: solr-config
                 key: solrLogsDir
-        command:
-        - sh
-        - -c
-        - mkdir -p /store/data && chown 8983:8983 /store/data && mkdir -p /store/logs && chown 8983:8983 /store/logs && cp /opt/solr/server/solr/solr.xml /store/data/solr.xml && docker-entrypoint.sh solr-foreground        
   volumeClaimTemplates:
   - metadata:
       name: solrc-data
