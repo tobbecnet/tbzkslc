@@ -49,25 +49,10 @@ spec:
               configMapKeyRef:
                 name: solr-config
                 key: solrLogsDir
-      initContainers:
-      - name: init-solr-data
-        image: busybox
-        command: ['sh', '-c', 'mkdir -p /store/data && chown 8983:8983 /store/data']
-        volumeMounts:
-        - name: solrc-data
-          mountPath: /store
-      - name: init-solr-logs
-        image: busybox
-        command: ['sh', '-c', 'mkdir -p /store/logs && chown 8983:8983 /store/logs']
-        volumeMounts:
-        - name: solrc-data
-          mountPath: /store
-      - name: init-solr-xml
-        image: solr:latest
-        command: ['sh', '-c', '[ ! -f /store/data/solr.xml ] && cp /opt/solr/server/solr/solr.xml /store/data/solr.xml || true']
-        volumeMounts:
-        - name: solrc-data
-          mountPath: /store
+        command:
+        - sh
+        - -c
+        - mkdir -p /store/data && chown 8983:8983 /store/data && mkdir -p /store/logs && chown 8983:8983 /store/logs && cp /opt/solr/server/solr/solr.xml /store/data/solr.xml && docker-entrypoint.sh solr-foreground        
   volumeClaimTemplates:
   - metadata:
       name: solrc-data
