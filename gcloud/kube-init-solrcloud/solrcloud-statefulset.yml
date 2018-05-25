@@ -1,0 +1,82 @@
+apiVersion: apps/v1beta2
+kind: StatefulSet
+metadata:
+  name: solrc-ss
+spec:
+  selector:
+    matchLabels:
+      app: solrc
+  serviceName: "solr-service"
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: solrc
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: solr
+        image: solr:latest
+        volumeMounts:
+        - name: solrc-data
+          mountPath: /store
+        ports:
+        - name: solr-port
+          containerPort: 8983
+        env:
+          - name: SOLR_HOME
+            valueFrom:
+              configMapKeyRef:
+                name: solr-config
+                key: solrHome
+          - name: SOLR_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: solr-config
+                key: solrPort
+          - name: ZK_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: solr-config
+                key: zkHost
+          - name: SOLR_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: solr-config
+                key: solrHost
+          - name: SOLR_LOGS_DIR
+            valueFrom:
+              configMapKeyRef:
+                name: solr-config
+                key: solrLogsDir
+      initContainers:
+      - name: init-solr-data
+        image: busybox
+        command: ['sh', '-c', 'mkdir -p /store/data && chown 8983:8983 /store/data']
+        volumeMounts:
+        - name: solrc-data
+          mountPath: /store
+      - name: init-solr-logs
+        image: busybox
+        command: ['sh', '-c', 'mkdir -p /store/logs && chown 8983:8983 /store/logs']
+        volumeMounts:
+        - name: solrc-data
+          mountPath: /store
+      - name: init-solr-xml
+        image: solr:latest
+        command: ['sh', '-c', '[ ! -f /store/data/solr.xml ] && cp /opt/solr/server/solr/solr.xml /store/data/solr.xml || true']
+        volumeMounts:
+        - name: solrc-data
+          mountPath: /store
+  volumeClaimTemplates:
+  - metadata:
+      name: solrc-data
+    spec:
+      selector:
+        matchLabels:
+          app: solrc
+      storageClassName: standard-solrc
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 30Gi

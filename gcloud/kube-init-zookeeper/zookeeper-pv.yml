@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: zk-data-0
+  labels:
+    app: zk
+  annotations:
+    pv.beta.kubernetes.io/gid: "1000"
+    pv.beta.kubernetes.io/uid: "1000"
+spec:
+  storageClassName: standard-zk
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 30Gi
+  gcePersistentDisk: 
+    fsType: "ext4" 
+    pdName: "pd-disk-mt-0"
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: zk-data-1
+  labels:
+    app: zk
+  annotations:
+    pv.beta.kubernetes.io/gid: "1001"
+    pv.beta.kubernetes.io/uid: "1001"
+spec:
+  storageClassName: standard-zk
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 30Gi
+  gcePersistentDisk:
+    fsType: "ext4"
+    pdName: "pd-disk-mt-1"
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: zk-data-2
+  labels:
+    app: zk
+  annotations:
+    pv.beta.kubernetes.io/gid: "1002"
+    pv.beta.kubernetes.ui/uid: "1002"
+spec:
+  storageClassName: standard-zk
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 30Gi
+  gcePersistentDisk:
+    fsType: "ext4"
+    pdName: "pd-disk-mt-2"
