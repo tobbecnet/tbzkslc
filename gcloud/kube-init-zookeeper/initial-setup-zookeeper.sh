@@ -11,7 +11,7 @@ kubectl create -f zookeeper-headless-service.yml
 kubectl create -f zookeeper-service.yml
 
 kubectl get pod
-kubectl get deployment
+kubectl get pv
 kubectl get service
 
 echo " -- zookeeper pv/statefulset/service created -- "

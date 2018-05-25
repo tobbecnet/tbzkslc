@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: zk-svc
+  name: zk-headl-svc
   labels:
     app: zk-svc
 spec:
