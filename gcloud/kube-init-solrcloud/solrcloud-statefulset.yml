@@ -14,6 +14,10 @@ spec:
         app: solrc
     spec:
       terminationGracePeriodSeconds: 10
+      volumes:
+      - name: solrc-data
+        persistentVolumeClaim:
+          claimName: solrc-pvc
       securityContext:
         runAsUser: 8983
         fsGroup: 8983
@@ -56,15 +60,15 @@ spec:
               configMapKeyRef:
                 name: solr-config
                 key: solrLogsDir
-  volumeClaimTemplates:
-  - metadata:
-      name: solrc-data
-    spec:
-      selector:
-        matchLabels:
-          app: solrc
-      storageClassName: standard-solrc
-      accessModes: [ "ReadWriteOnce" ]
-      resources:
-        requests:
-          storage: 30Gi
+#  volumeClaimTemplates:
+#  - metadata:
+#      name: solrc-data
+#    spec:
+#      selector:
+#        matchLabels:
+#          app: solrc
+#      storageClassName: standard-solrc
+#      accessModes: [ "ReadWriteOnce" ]
+#      resources:
+#        requests:
+#          storage: 30Gi

@@ -5,6 +5,7 @@ kubectl get configmap
 
 # TODO: Disks vergrößern. PV's für Solr anlegen und ebenfalls auf die Disks zeigen lassen, sodass eine 1/1 Beziehung zwischen Claims und PV's erzeugt werden kann.
 kubectl create -f solrcloud-pv.yml
+kubectl create -f solrcloud-pvc.yml
 
 # TODO volumeClaimTemplate in StatefulSet!!!
 # TODO Service Zookeeper? Zu welchem Port und welchem Host wollen die Solr's sich verbinden?

@@ -15,3 +15,4 @@ kubectl delete pv zk-data-0
 kubectl delete pv zk-data-1
 kubectl delete pv zk-data-2
 
+echo " -- Zookeeper PV/Configmap/Service deleted -- "

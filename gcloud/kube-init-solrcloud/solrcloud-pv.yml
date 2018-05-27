@@ -44,7 +44,7 @@ metadata:
     app: solrc
   annotations:
     pv.beta.kubernetes.io/gid: "1102"
-    pv.beta.kubernetes.ui/uid: "1102"
+    pv.beta.kubernetes.io/uid: "1102"
 spec:
   storageClassName: standard-solrc
   accessModes:
